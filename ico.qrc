@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="ico">
+    <file>ico/about.ico</file>
+    <file>ico/log.ico</file>
+    <file>ico/clear.ico</file>
+    <file>ico/config.ico</file>
+    <file>ico/exit.ico</file>
+    <file>ico/open.ico</file>
+    <file>ico/start.ico</file>
+  </qresource>
+</RCC>

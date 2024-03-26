@@ -13,6 +13,8 @@ import win32api
 import win32con
 import win32gui
 
+import ctypes
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
 
 def getTime(dat):
     intTime = int(dat)
@@ -52,7 +54,6 @@ class myMainWindow(QMainWindow):
         self.mainui = ui
         self.setWindowTitle('DSview 协议解析软件 V0.001')
         # self.mainui.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-
         self.mainui.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
 
     def dealWithFile(self, logFile, txtFile):
@@ -179,7 +180,7 @@ class myMainWindow(QMainWindow):
                     elif datList[i] == 'ACK':
                         pass
                     else:
-                        data.append(datList[i])
+                        data.append(datList[i])  # 是数据
 
                     datCnt += 1
                     if datCnt >= 16 * 2:
@@ -228,9 +229,10 @@ class myMainWindow(QMainWindow):
 
     ''' 开始解析 按钮 '''
     def startResoveProtocol(self):
-        self.clearContents()
         self.dealProcess()
         self.mainui.tableWidget.resizeColumnsToContents()
+        self.mainui.actionClearContents.setEnabled(True)
+        self.mainui.actionStartProtocol.setEnabled(False)
 
     ''' 打开文件 按钮 '''
     def openFile(self):
@@ -238,7 +240,10 @@ class myMainWindow(QMainWindow):
                                                          "选取文件",
                                                          "./",
                                                          "All Files (*);;Text Files (*.txt)")
-        self.dealWithFile(fileName, self.dwTxt)
+        if fileName:
+            self.dealWithFile(fileName, self.dwTxt)
+            self.mainui.actionCfgProtocol.setEnabled(True)
+            self.mainui.actionStartProtocol.setEnabled(True)
 
     ''' 配置解析按钮 '''
     def configureProtocol(self):
@@ -248,3 +253,6 @@ class myMainWindow(QMainWindow):
     def clearContents(self):
         while self.mainui.tableWidget.rowCount() > 0:
             self.mainui.tableWidget.removeRow(0)
+
+        self.mainui.actionStartProtocol.setEnabled(True)
+        self.mainui.actionClearContents.setEnabled(False)
